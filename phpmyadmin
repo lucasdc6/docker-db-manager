@@ -6,6 +6,14 @@ PORT=8080
 VERSION="latest"
 FILE="$HOME/bin/etc/docker/phpmyadmin/config.user.inc.php"
 
+function extra_option {
+  echo -e "The option -n|--n support the -c|--conf option to specify a configuration file\n\n"
+}
+
+function extra_default_value {
+  echo -e "\tCONFIG FILE: $FILE"
+}
+
 function new_container {
   IMAGE_NAME="$DOCKERNAME:$VERSION"
   IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 --restart=always -v $FILE:/etc/phpmyadmin/config.user.inc.php"

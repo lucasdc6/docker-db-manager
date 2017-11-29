@@ -28,12 +28,20 @@ function show_help {
   echo -e "\e[1mRestart\e[0m a running process"
   echo -e "\t$PROG --restart[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
 
+  # Define extra_option to add info extra for the options
+  [ -n "$(type -t extra_option)" ] && ( extra_option )
+
   echo -e "Default values:"
   echo -e "\tNAME: $NAME"
   echo -e "\tPORT: $PORT"
   echo -e "\tVERSION: $VERSION"
+  # Define extra_default_value to add extra values
+  [ -n "$(type -t extra_default_value)" ] && ( extra_default_value )
 
   echo -e "\nWorking with $DOCKERNAME docker image"
+
+  # Define extra_help to add info extra at the end of the basic help
+  [ -n "$(type -t extra_help)" ] && ( extra_help )
 }
 
 if [ $# -eq 0 ] ; then
@@ -124,6 +132,7 @@ done
 
 case $OPTION in
   new)
+    [ -z "$(type -t new_container)" ] && ( echo "You need to define new_container"; exit 1 )
     new_container ;;
   status)
     status_container ;;
