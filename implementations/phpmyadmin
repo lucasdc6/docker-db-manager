@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DOCKERNAME="phpmyadmin/phpmyadmin"
+NAME="phpmyadmin"
+PORT=8080
+VERSION="latest"
+FILE="$HOME/bin/etc/docker/phpmyadmin/config.user.inc.php"
+
+function new_container {
+  IMAGE_NAME="$DOCKERNAME:$VERSION"
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 --restart=always -v $FILE:/etc/phpmyadmin/config.user.inc.php"
+  echo $NAME-$VERSION in $PORT with config file $FILE
+  docker run --name $NAME-$VERSION -d --restart=always -p $PORT:80 $IMAGE_OPTIONS $IMAGE_NAME
+}
+
+source .docker_wrapper_template

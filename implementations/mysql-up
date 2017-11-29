@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DOCKERNAME="mysql"
+NAME="mysql"
+PORT=3306
+VERSION="latest"
+
+function new_container {
+  IMAGE_NAME="$DOCKERNAME:$VERSION"
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 -e MYSQL_ALLOW_EMPTY_PASSWORD='yes' -v mysql-data-$VERSION:/var/lib/mysql"
+  echo $NAME-$VERSION in $PORT
+  docker run --name $NAME-$VERSION -d --restart=always -p $PORT:3306 $IMAGE_OPTIONS $IMAGE_NAME
+}
+
+source .docker_wrapper_template

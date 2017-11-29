@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOCKERNAME="elasticsearch"
+NAME="elasticsearch"
+PORT=9200
+VERSION=latest
+
+function new_container {
+  IMAGE_NAME=$DOCKERNAME:$VERSION
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 -e 'http.host=0.0.0.0' -e transport.host=127.0.0.1 -e 'xpack.security.enabled=false'"
+  docker run --name $NAME-$VERSION -d --restart=always -p $PORT:9200 $IMAGE_OPTIONS -v "/var/lib/elasticsearch/$VERSION":/usr/share/elasticsearch/data $IMAGE_NAME
+}
+
+source .docker_wrapper_template

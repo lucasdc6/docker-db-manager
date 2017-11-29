@@ -1,0 +1,138 @@
+#!/bin/bash
+
+PROG=`echo $0 | rev | cut -d/ -f1 | rev`
+
+function show_help {
+  echo -e "Usage:\n"
+  echo -e "\e[1mCreate\e[0m a new process"
+  echo -e "\t$PROG -n[\e[4mNAME\e[0m] [ -v \e[4mVERSION\e[0m ] [ -p \e[4mPORT\e[0m ]"
+  echo -e "\t\tor"
+  echo -e "\t$PROG --new[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m ] [ --port \e[4mPORT\e[0m ]\n\n"
+
+  echo -e "\e[1mList\e[0m running process"
+  echo -e "\t$PROG -l[\e[4mNAME\e[0m]"
+  echo -e "\t\tor"
+  echo -e "\t$PROG --list[=\e[4mNAME\e[0m]\n\n"
+
+  echo -e "\e[1mShow\e[0m status of a process"
+  echo -e "\t$PROG -s[\e[4mNAME\e[0m] [ -v \e[4mVERSION\e[0m]"
+  echo -e "\t\tor"
+  echo -e "\t$PROG --status[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+
+  echo -e "\e[1mStart\e[0m a stopped process"
+  echo -e "\t$PROG --start[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+
+  echo -e "\e[1mStop\e[0m a running process"
+  echo -e "\t$PROG --stop[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+
+  echo -e "\e[1mRestart\e[0m a running process"
+  echo -e "\t$PROG --restart[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+
+  echo -e "Default values:"
+  echo -e "\tNAME: $NAME"
+  echo -e "\tPORT: $PORT"
+  echo -e "\tVERSION: $VERSION"
+
+  echo -e "\nWorking with $DOCKERNAME docker image"
+}
+
+if [ $# -eq 0 ] ; then
+  show_help
+  exit 0
+fi
+
+set -e
+
+TEMP=`getopt -o n::s::r::l::v:p:c:h --long new::,status::,start::,stop::,restart::,list::,version:,port:,config:,dead,help -n $PROG -- "$@"`
+eval set -- "$TEMP"
+
+function status_container {
+  STATUS=`docker ps --filter name=$NAME-$VERSION --format {{.Status}}`
+  if [ -n "$STATUS" ] ; then
+    echo $NAME-$VERSION status:
+    echo $STATUS
+  else
+    echo No such container: $NAME-$VERSION
+  fi
+}
+
+function start_container {
+  echo Starting $NAME-$VERSION
+  docker start $NAME-$VERSION
+}
+
+function stop_container {
+  echo Stoping $NAME-$VERSION
+  docker stop $NAME-$VERSION
+}
+
+function restart_container {
+  echo Restarting $NAME-$VERSION
+  docker restart $NAME-$VERSION
+}
+
+function list_containers {
+  echo -e "Running containers for $NAME\n"
+  docker ps -a --filter name=$NAME --format "{{.Names}} ({{.Status}})"
+}
+
+while true ; do
+  case "$1" in
+    -n|--new)
+        NAME=${2:-$NAME}
+        OPTION="new"
+        shift 2 ;;
+    -s|--status)
+        NAME=${2:-$NAME}
+        OPTION="status"
+        shift 2 ;;
+    --start)
+        NAME=${2:-$NAME}
+        OPTION="start"
+        shift 2 ;;
+    --stop)
+        NAME=${2:-$NAME}
+        OPTION="stop"
+        shift 2 ;;
+    -r|--restart)
+        NAME=${2:-$NAME}
+        OPTION="restart"
+        shift 2 ;;
+    -l|--list)
+        NAME=${2:-$NAME}
+        OPTION="list"
+        shift 2 ;;
+    -c|--config)
+        [ ! -r $2 -o ! -f $2 ] && ( echo "You must specify a FILE with READ permissions"; exit 1 )
+        FILE=${2:-$FILE}
+        shift 2 ;;
+    -p|--port)
+        [[ ! $2 =~ ^[0-9]+$ ]] && ( echo "You must specify a number"; exit 1)
+        PORT=${2:-$PORT}
+        shift 2
+        ;;
+    -v|--version)
+        VERSION=${2:-$VERSION}
+        shift 2 ;;
+    -h|--help)
+        show_help
+        shift ;;
+    --) shift ; break ;;
+    *) echo "Internal error!" ; exit 1 ;;
+  esac
+done
+
+case $OPTION in
+  new)
+    new_container ;;
+  status)
+    status_container ;;
+  start)
+    start_container ;;
+  stop)
+    stop_container ;;
+  restart)
+    restart_container ;;
+  list)
+    list_containers ;;
+esac
