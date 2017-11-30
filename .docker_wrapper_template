@@ -25,6 +25,9 @@ function show_help {
   echo -e "\e[1mStop\e[0m a running process"
   echo -e "\t$PROG --stop[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
 
+  echo -e "\e[1mRemove\e[0m a running process"
+  echo -e "\t$PROG --remove[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+
   echo -e "\e[1mRestart\e[0m a running process"
   echo -e "\t$PROG --restart[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
 
@@ -51,7 +54,7 @@ fi
 
 set -e
 
-TEMP=`getopt -o n::s::r::l::v:p:c:h --long new::,status::,start::,stop::,restart::,list::,version:,port:,config:,dead,help -n $PROG -- "$@"`
+TEMP=`getopt -o n::s::r::l::v:p:c:h --long new::,status::,start::,stop::,restart::,remove::,list::,version:,port:,config:,help -n $PROG -- "$@"`
 eval set -- "$TEMP"
 
 function status_container {
@@ -84,6 +87,12 @@ function list_containers {
   docker ps -a --filter name=$NAME --format "{{.Names}} ({{.Status}})"
 }
 
+function remove_container {
+  stop_container
+  echo -e "Removing $NAME-$VERSION"
+  docker rm $NAME-$VERSION
+}
+
 while true ; do
   case "$1" in
     -n|--new)
@@ -105,6 +114,10 @@ while true ; do
     -r|--restart)
         NAME=${2:-$NAME}
         OPTION="restart"
+        shift 2 ;;
+     --remove)
+        NAME=${2:-$NAME}
+        OPTION="remove"
         shift 2 ;;
     -l|--list)
         NAME=${2:-$NAME}
@@ -142,6 +155,8 @@ case $OPTION in
     stop_container ;;
   restart)
     restart_container ;;
+  remove)
+    remove_container ;;
   list)
     list_containers ;;
 esac
