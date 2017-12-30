@@ -26,7 +26,7 @@ TEMP=`getopt -o s,g,c:,h --long show,generate,conf:,help -n $PROG -- "$@"`
 eval set -- "$TEMP"
 
 function generate_conf {
-  CONTAINERS=($(docker ps | grep mysql | awk '{print $10"#"$11}'))
+  CONTAINERS=($(docker ps --format "{{.Ports}}#{{.Names}}" | grep mysql))
 
   cat << 'CONF' > /tmp/config.user.inc.php
 <?php
