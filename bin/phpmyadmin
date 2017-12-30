@@ -38,4 +38,4 @@ function new_container {
   docker run --name $NAME-$VERSION -d --restart=always -p $PORT:80 $IMAGE_OPTIONS $IMAGE_NAME
 }
 
-source ../.docker_wrapper_template
+source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template

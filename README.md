@@ -1,5 +1,19 @@
 # Docker-wrapper-template
-A basic template script for manage and execute Docker containers
+
+Template para generar wrappers que ejecuten fácilmente una imagen docker.
+La finalidad es proporcionar una capa de abstracción extra para solamente
+enfocarse en la configuración base para arrancar una imagen docker por única
+vez.
+
+Además se agregan funcionalidades para agrupar procesos de una misma imagen
+docker en sus diferentes versiones.
+Estas funcionalidades son:
+  * Iniciar un nuevo proceso.
+  * Detener un procesos existente.
+  * Eliminar un proceso existente.
+  * Conocer el estado de un proceso.
+  * Listar todos los procesos de una imagen en particular.
+  * etc.
 
 ## Instalación
 
@@ -9,8 +23,10 @@ $ git clone git@github.com:lucasdc6/Docker-wrapper-template.git
 ~/.docker-wrappers
 ```
 
-2. Agregar el directorio ~/.docker-wrappers/bin para contar con todos los ejecutables
+2. Agregar el directorio ~/.docker-wrappers/bin para contar con todos los ejecutables.
+Además agregar el directorio raíz donde se clonó el repositorio.
 ```bash
+$ echo 'export DOCKERWRAPPERS_ROOT=~/.docker-wrappers' >> ~/.bash_profile
 $ echo 'export PATH="$HOME/.docker-wrappers/bin:$PATH"' >> ~/.bash_profile
 ```
 
@@ -53,10 +69,8 @@ Los valores de cada variables se describen en la sección "Variables de ambiente
 Por ultimo es necesario realizar el llamado al template de la siguiente mantera:
 
 ```bash
-source ../.docker_wrapper_template
+source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
 ```
-
-__Tener en cuenta el path al template__
 
 Es muy importante realizar el llamado al template **al final** del script para
 evitar posibles colisiones con valores de varialbes seteadas en el template.
