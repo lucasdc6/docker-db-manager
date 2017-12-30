@@ -3,41 +3,48 @@
 PROG=`echo $0 | rev | cut -d/ -f1 | rev`
 
 function show_help {
-  echo -e "Usage:\n"
-  echo -e "\e[1mCreate\e[0m a new process"
-  echo -e "\t$PROG -n[\e[4mNAME\e[0m] [ -v \e[4mVERSION\e[0m ] [ -p \e[4mPORT\e[0m ]"
-  echo -e "\t\tor"
-  echo -e "\t$PROG --new[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m ] [ --port \e[4mPORT\e[0m ]\n\n"
+  cat <<HELP
+Usage:
 
-  echo -e "\e[1mList\e[0m running process"
-  echo -e "\t$PROG -l[\e[4mNAME\e[0m]"
-  echo -e "\t\tor"
-  echo -e "\t$PROG --list[=\e[4mNAME\e[0m]\n\n"
+  Create a new process
+      $PROG -n[NAME] [ -v VERSION] [ -p PORT ]
+                      or
+      $PROG --new[=NAME ] [ --version VERSION ] [ --port PORT ]
 
-  echo -e "\e[1mShow\e[0m status of a process"
-  echo -e "\t$PROG -s[\e[4mNAME\e[0m] [ -v \e[4mVERSION\e[0m]"
-  echo -e "\t\tor"
-  echo -e "\t$PROG --status[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+  List running process
+      $PROG -l[NAME]
+            or
+      $PROG --list[= NAME ]
 
-  echo -e "\e[1mStart\e[0m a stopped process"
-  echo -e "\t$PROG --start[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+  Show status of a process
+      $PROG -s[NAME] [ -v VERSION ]
+                 or
+      $PROG --status[=NAME ] [ --version VERSION ]
 
-  echo -e "\e[1mStop\e[0m a running process"
-  echo -e "\t$PROG --stop[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+  Start a stopped process
+      $PROG --start[=NAME] [ --version VERSION]
 
-  echo -e "\e[1mRemove\e[0m a running process"
-  echo -e "\t$PROG --remove[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+  Stop a running process
+      $PROG --stop[=NAME] [ --version VERSION]
 
-  echo -e "\e[1mRestart\e[0m a running process"
-  echo -e "\t$PROG --restart[=\e[4mNAME\e[0m] [ --version \e[4mVERSION\e[0m]\n\n"
+  Remove a process
+      $PROG --remove[=NAME] [ --version VERSION ]
 
+  Restart a running process
+      $PROG --restart[=NAME] [ --version VERSION ]
+
+HELP
   # Define extra_option to add info extra for the options
   [ -n "$(type -t extra_option)" ] && ( extra_option )
 
-  echo -e "Default values:"
-  echo -e "\tNAME: $NAME"
-  echo -e "\tPORT: $PORT"
-  echo -e "\tVERSION: $VERSION"
+cat <<HELP
+Default values:
+
+  NAME: $NAME
+  PORT: $PORT
+  VERSION: $VERSION
+HELP
+
   # Define extra_default_value to add extra values
   [ -n "$(type -t extra_default_value)" ] && ( extra_default_value )
 
