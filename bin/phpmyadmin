@@ -1,0 +1,41 @@
+#!/bin/bash
+
+DOCKERNAME="phpmyadmin/phpmyadmin"
+NAME="phpmyadmin"
+PORT=8080
+VERSION="latest"
+FILE="$HOME/bin/etc/docker/phpmyadmin/config.user.inc.php"
+
+function extra_option {
+  if [ -n "$(which phpmyadmin-conf)" ]
+  then
+    cat <<EXTRA_OPTION
+  Generate the local configuration
+      phpmyadmin-conf -g [ -c /path/to/config/file]
+                    or
+      phpmyadmin --generate [ --conf /path/to/config/file]
+
+  Show the local configuration
+      phpmyadmin-conf -s [ -c /path/to/config/file]
+                    or
+      phpmyadmin --show [ --conf /path/to/config/file]
+
+EXTRA_OPTION
+  fi
+  echo -e "The option -n|--new support the -c|--conf option to specify a configuration file\n\n"
+}
+
+function extra_default_value {
+  cat <<HELP
+  CONFIG FILE: $FILE
+HELP
+}
+
+function new_container {
+  IMAGE_NAME="$DOCKERNAME:$VERSION"
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 --restart=always -v $FILE:/etc/phpmyadmin/config.user.inc.php"
+  echo $NAME-$VERSION in $PORT with config file $FILE
+  docker run --name $NAME-$VERSION -d --restart=always -p $PORT:80 $IMAGE_OPTIONS $IMAGE_NAME
+}
+
+source ../.docker_wrapper_template

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+set -e
+PROG=`basename $0`
+TEMP=`getopt -o s,g,c:,h --long show,generate,conf:,help -n $PROG -- "$@"`
+eval set -- "$TEMP"
+
+FILE=`phpmyadmin | grep "CONFIG FILE" | cut -d: -f2`
+
+function help {
+cat <<HELP
+Usage:
+
+  $PROG -g | --generate   Genearte the local config
+
+  $PROG -s | --show       Show the local config
+
+  $PROG -h | --help       Show this help
+HELP
+}
+
+function generate_conf {
+  CONTAINERS=($(docker ps | grep mysql | awk '{print $10"#"$11}'))
+
+  cat << 'CONF' > /tmp/config.user.inc.php
+<?php
+$cfg['blowfish_secret']='multiServerDockerPhpmyadmin20171129';
+$i = 0;
+CONF
+  I=1
+  for CONTAINER in ${CONTAINERS[@]}
+  do
+    NAME=`echo $CONTAINER | cut -d# -f2`
+    PORT=`echo $CONTAINER | cut -d# -f1 | cut -d- -f1 | cut -d: -f2`
+    cat << CONF >> /tmp/config.user.inc.php
+
+\$i++; // server $I :
+\$cfg['Servers'][\$i]['auth_type'] = 'cookie';
+\$cfg['Servers'][\$i]['verbose']   = "$NAME";
+\$cfg['Servers'][\$i]['host']      = 'local.docker';
+\$cfg['Servers'][\$i]['port']      = '$PORT';
+\$cfg['Servers'][\$i]['extension'] = 'mysqli';
+\$cfg['Servers'][\$i]['AllowNoPassword'] = TRUE;
+CONF
+
+  ((I++))
+  done
+
+  echo -e "\n\$cfg['ServerDefault'] = 1;" >> /tmp/config.user.inc.php
+
+  cp /tmp/config.user.inc.php $FILE
+}
+
+while true; do
+  case "$1" in
+    -s|--show)
+      OPTION="show"
+      shift;;
+    -g|--generate)
+      OPTION="generate"
+      shift;;
+    -c|--conf)
+      FILE=$2
+      shift 2;;
+    -h|--help)
+      help
+      shift
+      exit 1;;
+    --) shift ; break ;;
+    *) echo "Internal error!" ; exit 1 ;;
+  esac
+done
+
+case $OPTION in
+    show)
+      [ ! -f $FILE ] && ( echo "$FILE not found"; exit 1 )
+      cat $FILE
+      exit 0
+    ;;
+    generate)
+      generate_conf
+    exit 0;;
+esac

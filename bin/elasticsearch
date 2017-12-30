@@ -11,4 +11,4 @@ function new_container {
   docker run --name $NAME-$VERSION -d --restart=always -p $PORT:9200 $IMAGE_OPTIONS -v "/var/lib/elasticsearch/$VERSION":/usr/share/elasticsearch/data $IMAGE_NAME
 }
 
-source .docker_wrapper_template
+source ../.docker_wrapper_template
