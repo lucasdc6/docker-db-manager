@@ -2,12 +2,10 @@
 
 set -e
 PROG=`basename $0`
-TEMP=`getopt -o s,g,c:,h --long show,generate,conf:,help -n $PROG -- "$@"`
-eval set -- "$TEMP"
 
 FILE=`phpmyadmin | grep "CONFIG FILE" | cut -d: -f2`
 
-function help {
+function show_help {
 cat <<HELP
 Usage:
 
@@ -18,6 +16,14 @@ Usage:
   $PROG -h | --help       Show this help
 HELP
 }
+
+if [ $# -eq 0 ] ; then
+  show_help
+  exit 0
+fi
+
+TEMP=`getopt -o s,g,c:,h --long show,generate,conf:,help -n $PROG -- "$@"`
+eval set -- "$TEMP"
 
 function generate_conf {
   CONTAINERS=($(docker ps | grep mysql | awk '{print $10"#"$11}'))
@@ -63,7 +69,7 @@ while true; do
       FILE=$2
       shift 2;;
     -h|--help)
-      help
+      show_help
       shift
       exit 1;;
     --) shift ; break ;;
