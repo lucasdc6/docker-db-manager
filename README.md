@@ -19,8 +19,7 @@ Estas funcionalidades son:
 
 1. Clonar el repositorio en ~/.docker-wrappers
 ```bash
-$ git clone git@github.com:lucasdc6/Docker-wrapper-template.git
-~/.docker-wrappers
+$ git clone git@github.com:lucasdc6/Docker-wrapper-template.git ~/.docker-wrappers
 ```
 
 2. Agregar el directorio ~/.docker-wrappers/bin para contar con todos los ejecutables.
