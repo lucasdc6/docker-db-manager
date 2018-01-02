@@ -35,7 +35,7 @@ function new_container {
   IMAGE_NAME="$DOCKERNAME:$VERSION"
   IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 --restart=always -v $FILE:/etc/phpmyadmin/config.user.inc.php"
   echo $NAME-$VERSION in $PORT with config file $FILE
-  docker run --name $NAME-$VERSION -d --restart=always -p $PORT:80 $IMAGE_OPTIONS $IMAGE_NAME
+  docker run --name $NAME-$VERSION -d --restart=unless-stopped -p $PORT:80 $IMAGE_OPTIONS $IMAGE_NAME
 }
 
 source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
