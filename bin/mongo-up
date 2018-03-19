@@ -12,4 +12,4 @@ function new_container {
   docker run --name $NAME-$VERSION -d --restart=unless-stopped -p $PORT:27017 $IMAGE_OPTIONS $IMAGE_NAME
 }
 
-source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
+source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
