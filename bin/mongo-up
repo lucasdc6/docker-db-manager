@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DOCKERNAME="mongo"
+NAME="mongo"
+PORT=27017
+VERSION="latest"
+
+function new_container {
+  IMAGE_NAME="$DOCKERNAME:$VERSION"
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 -v mongo-data-$VERSION:/data/db"
+  echo $NAME-$VERSION in $PORT
+  docker run --name $NAME-$VERSION -d --restart=unless-stopped -p $PORT:27017 $IMAGE_OPTIONS $IMAGE_NAME
+}
+
+source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
