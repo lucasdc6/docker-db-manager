@@ -102,6 +102,34 @@ function remove_container {
 
 while true ; do
   case "$1" in
+    -n|--new)
+        NAME=${2:-$NAME}
+        OPTION="new"
+        shift 2 ;;
+    -s|--status)
+        NAME=${2:-$NAME}
+        OPTION="status"
+        shift 2 ;;
+    --start)
+        NAME=${2:-$NAME}
+        OPTION="start"
+        shift 2 ;;
+    --stop)
+        NAME=${2:-$NAME}
+        OPTION="stop"
+        shift 2 ;;
+    -r|--restart)
+        NAME=${2:-$NAME}
+        OPTION="restart"
+        shift 2 ;;
+     --remove)
+        NAME=${2:-$NAME}
+        OPTION="remove"
+        shift 2 ;;
+    -l|--list)
+        NAME=${2:-$NAME}
+        OPTION="list"
+        shift 2 ;;
     -c|--config)
         [ ! -r $2 -o ! -f $2 ] && ( echo "You must specify a FILE with READ permissions"; exit 1 )
         FILE=${2:-$FILE}
@@ -122,9 +150,7 @@ while true ; do
   esac
 done
 
-NAME=${2:-$NAME}
-
-case $1 in
+case $OPTION in
   new)
     [ -z "$(type -t new_container)" ] && ( echo "You need to define new_container"; exit 1 )
     new_container ;;
