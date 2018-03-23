@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DOCKERNAME="influxdb"
+NAME="influxdb"
+PORT=8086
+VERSION="latest"
+
+function new_container {
+  IMAGE_NAME="$DOCKERNAME:$VERSION"
+  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 -v $NAME-data-$VERSION:/var/lib/mysql"
+  echo $NAME-$VERSION in $PORT
+  docker run --name $NAME-$VERSION -d --restart=unless-stopped -p $PORT:8086 $IMAGE_OPTIONS $IMAGE_NAME
+}
+
+source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
