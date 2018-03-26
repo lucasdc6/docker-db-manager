@@ -52,7 +52,8 @@ HELP
 
   # Define extra_help to add info extra at the end of the basic help
   [ -n "$(type -t extra_help)" ] && ( extra_help )
-  echo -e "\nVersion: `cat VERSION`"
+
+  echo -e "\nVersion: `cat $DOCKERWRAPPERS_ROOT/VERSION`"
 }
 
 if [ $# -eq 0 ] ; then
