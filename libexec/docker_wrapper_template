@@ -153,6 +153,12 @@ done
 case $OPTION in
   new)
     [ -z "$(type -t new_container)" ] && ( echo "You need to define new_container"; exit 1 )
+    IMAGE_NAME="$DOCKERNAME:$VERSION"
+    NAME_DEFAULT="$NAME-$VERSION"
+    PORTS_DEFAULT="$PORT:$STANDAR_PORT"
+    RESTART_POLICY_DEFAULT="--restart=unless-stopped"
+    DEFAULT_OPTIONS="--name $NAME_DEFAULT -d $RESTART_POLICY_DEFAULT -p $PORTS_DEFAULT"
+    echo $NAME-$VERSION in $PORT
     new_container ;;
   status)
     status_container ;;
@@ -163,6 +169,7 @@ case $OPTION in
   restart)
     restart_container ;;
   remove)
+    stop_container
     remove_container ;;
   list)
     list_containers ;;

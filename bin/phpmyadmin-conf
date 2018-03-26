@@ -55,6 +55,9 @@ CONF
   echo -e "\n\$cfg['ServerDefault'] = 1;" >> /tmp/config.user.inc.php
 
   cp /tmp/config.user.inc.php $FILE
+  echo "File generated"
+  phpmyadmin --restart
+  echo "phpmyadmin restarted"
 }
 
 while true; do

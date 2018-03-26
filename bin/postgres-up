@@ -1,13 +1,13 @@
 #!/bin/bash
 
-DOCKERNAME="mongo"
-NAME="mongo"
-STANDAR_PORT=27017
+DOCKERNAME="postgres"
+NAME="postgres"
+STANDAR_PORT=5432
 PORT=$STANDAR_PORT
 VERSION="latest"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v mongo-data-$VERSION:/data/db"
+  IMAGE_EXTRA_OPTIONS="-v postgres-data-$VERSION:/var/lib/postgresql/data"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

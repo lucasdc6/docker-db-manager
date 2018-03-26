@@ -2,13 +2,13 @@
 
 DOCKERNAME="elasticsearch"
 NAME="elasticsearch"
-PORT=9200
+STANDAR_PORT=9200
+PORT=$STANDAR_PORT
 VERSION=latest
 
 function new_container {
-  IMAGE_NAME=$DOCKERNAME:$VERSION
-  IMAGE_OPTIONS="--add-host local.docker:172.17.0.1 -e 'http.host=0.0.0.0' -e transport.host=127.0.0.1 -e 'xpack.security.enabled=false'"
-  docker run --name $NAME-$VERSION -d --restart=unless-stopped -p $PORT:9200 $IMAGE_OPTIONS -v "/var/lib/elasticsearch/$VERSION":/usr/share/elasticsearch/data $IMAGE_NAME
+  IMAGE_EXTRA_OPTIONS="-e 'http.host=0.0.0.0' -e transport.host=127.0.0.1 -e 'xpack.security.enabled=false' -v /var/lib/elasticsearch/$VERSION:/usr/share/elasticsearch/data"
+  docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 
-source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
+source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
