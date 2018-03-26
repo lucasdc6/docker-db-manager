@@ -50,9 +50,9 @@ function new_container {
 Además existen otras 3 funciones las cuales se pueden definir para extender la
 documentación:
 
-  * extra_option: Para extender nuevas opciones agregadas.
-  * extra_default_value: Para extender nuevos valores por defecto agregados.
-  * extra_help: Para agregar cualquier otro extracto de ayuda.
+  * extra\_option: Para extender nuevas opciones agregadas.
+  * extra\_default_value: Para extender nuevos valores por defecto agregados.
+  * extra\_help: Para agregar cualquier otro extracto de ayuda.
 
 Los tres casos se pueden ver utilizados en el script "phpmyadmin".
 
@@ -79,9 +79,29 @@ evitar posibles colisiones con valores de varialbes seteadas en el template.
 Se cuenta con las siguientes variables de ambiente definidas en el archivo
 .docker_wapper_template:
 
-  * PROG: Nombre del script.
-  * NAME: Nombre de la imagen docker utilizada (sin tag).
-  * PORT: Puerto de la máquina **host** por el cual se comunica la imagen docker.
-  * VERSION: Tag de la imagen docker utilizado.
-  * DOCKERNAME: Nombre completo del repositorio utilizado para la imagne docker.
-  * OPTION: Opción seleccionada dentro del script (new por ejemplo).
+  * `PROG`: Nombre del script.
+  * `NAME`: Nombre de la imagen docker utilizada (sin tag).
+  * `STANDAR_PORT`: Puesto en que escucha el programa normalmente (ej: mysql usa
+    el puerto 3306)
+  * `PORT`: Puerto de la máquina **host** por el cual se comunica la imagen docker.
+  * `VERSION`: Tag de la imagen docker utilizado.
+  * `DOCKERNAME`: Nombre completo del repositorio utilizado para la imagne docker.
+  * `OPTION`: Opción seleccionada dentro del script (new por ejemplo).
+
+## Valores por default de las imagenes
+
+El script docker_wapper_template asume varias configuraciones por defecto, para
+facilitar la escritura de la funcion `new_container`:
+
+  * `IMAGE_NAME`: Se obtiene al juntar las variables `DOCKERNAME` y `VERSION`,
+    separadas por un ":"
+  * `NAME_DEFAULT`: El nombre del container, por default, se obtiene de juntar
+    las variables `NAME` y `VERSION`, separadas por un "-"
+  * `PORTS_DEFAULT`: Información enviada a la opción "-p" al "docker run", por
+    defecto se obtiene al juntar las variables `PORT` y `STANDAR_PORT`,
+separadas por un ":"
+  * `RESTART_POLICY_DEFAULT`: Seteado por default en `unless-stopped`. Ver
+    [docker restart
+policies](https://docs.docker.com/config/containers/start-containers-automatically/) para mas información
+
+Todas las variables anteriormente definidas, forman la variable `DEFAULT_OPTIONS`, la cual define una base que se recomienda utilizar.
