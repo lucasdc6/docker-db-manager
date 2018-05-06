@@ -3,7 +3,7 @@
 set -e
 PROG=`basename $0`
 
-FILE=`phpmyadmin | grep "CONFIG FILE" | cut -d: -f2`
+FILE=`phpmyadmin-up | grep "CONFIG FILE" | cut -d: -f2`
 
 function show_help {
 cat <<HELP
@@ -38,12 +38,13 @@ CONF
   do
     NAME=`echo $CONTAINER | cut -d# -f2`
     PORT=`echo $CONTAINER | cut -d# -f1 | cut -d- -f1 | cut -d: -f2`
+    echo $PORT
     cat << CONF >> /tmp/config.user.inc.php
 
 \$i++; // server $I :
 \$cfg['Servers'][\$i]['auth_type'] = 'cookie';
 \$cfg['Servers'][\$i]['verbose']   = "$NAME";
-\$cfg['Servers'][\$i]['host']      = 'local.docker';
+\$cfg['Servers'][\$i]['host']      = '172.16.0.1';
 \$cfg['Servers'][\$i]['port']      = '$PORT';
 \$cfg['Servers'][\$i]['extension'] = 'mysqli';
 \$cfg['Servers'][\$i]['AllowNoPassword'] = TRUE;
@@ -56,7 +57,7 @@ CONF
 
   cp /tmp/config.user.inc.php $FILE
   echo "File generated"
-  phpmyadmin --restart
+  phpmyadmin-up --restart
   echo "phpmyadmin restarted"
 }
 
