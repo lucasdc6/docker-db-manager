@@ -78,17 +78,17 @@ function status_container {
 
 function start_container {
   echo Starting $NAME-$VERSION
-  docker start $NAME-$VERSION
+  docker start $NAME-$VERSION > /dev/null
 }
 
 function stop_container {
   echo Stoping $NAME-$VERSION
-  docker stop $NAME-$VERSION
+  docker stop $NAME-$VERSION > /dev/null
 }
 
 function restart_container {
   echo Restarting $NAME-$VERSION
-  docker restart $NAME-$VERSION
+  docker restart $NAME-$VERSION > /dev/null
 }
 
 function list_containers {
@@ -97,9 +97,8 @@ function list_containers {
 }
 
 function remove_container {
-  stop_container
   echo -e "Removing $NAME-$VERSION"
-  docker rm $NAME-$VERSION
+  docker rm $NAME-$VERSION > /dev/null
 }
 
 while true ; do
@@ -159,9 +158,9 @@ case $OPTION in
     NAME_DEFAULT="$NAME-$VERSION"
     PORTS_DEFAULT="$PORT:$STANDAR_PORT"
     RESTART_POLICY_DEFAULT="--restart=unless-stopped"
-    DEFAULT_OPTIONS="--name $NAME_DEFAULT -d $RESTART_POLICY_DEFAULT -p $PORTS_DEFAULT"
+    DEFAULT_OPTIONS="--add-host local.docker:172.17.0.1 --name $NAME_DEFAULT -d $RESTART_POLICY_DEFAULT -p $PORTS_DEFAULT"
     echo $NAME-$VERSION in $PORT
-    new_container ;;
+    new_container > /dev/null ;;
   status)
     status_container ;;
   start)
