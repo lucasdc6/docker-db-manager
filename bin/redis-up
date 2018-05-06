@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOCKERNAME="redis"
+NAME="redis"
+STANDAR_PORT=6379
+PORT=$STANDAR_PORT
+VERSION="latest"
+
+function new_container {
+  IMAGE_EXTRA_OPTIONS="-v redis-data-$VERSION:/data"
+  docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
+}
+
+source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
