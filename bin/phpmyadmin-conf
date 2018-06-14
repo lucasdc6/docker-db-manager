@@ -27,7 +27,6 @@ eval set -- "$TEMP"
 
 function generate_conf {
   CONTAINERS=($(docker ps --format "{{.Ports}}#{{.Names}}" | grep mysql))
-
   cat << 'CONF' > /tmp/config.user.inc.php
 <?php
 $cfg['blowfish_secret']='multiServerDockerPhpmyadmin20171129';
@@ -38,13 +37,12 @@ CONF
   do
     NAME=`echo $CONTAINER | cut -d# -f2`
     PORT=`echo $CONTAINER | cut -d# -f1 | cut -d- -f1 | cut -d: -f2`
-    echo $PORT
     cat << CONF >> /tmp/config.user.inc.php
 
 \$i++; // server $I :
 \$cfg['Servers'][\$i]['auth_type'] = 'cookie';
 \$cfg['Servers'][\$i]['verbose']   = "$NAME";
-\$cfg['Servers'][\$i]['host']      = '172.16.0.1';
+\$cfg['Servers'][\$i]['host']      = 'local.docker';
 \$cfg['Servers'][\$i]['port']      = '$PORT';
 \$cfg['Servers'][\$i]['extension'] = 'mysqli';
 \$cfg['Servers'][\$i]['AllowNoPassword'] = TRUE;
