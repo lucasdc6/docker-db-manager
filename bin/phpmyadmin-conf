@@ -26,7 +26,7 @@ TEMP=`getopt -o s,g,c:,h --long show,generate,conf:,help -n $PROG -- "$@"`
 eval set -- "$TEMP"
 
 function generate_conf {
-  CONTAINERS=($(docker ps --format "{{.Ports}}#{{.Names}}" | grep mysql))
+  CONTAINERS=($(docker ps --format "{{.Ports}}#{{.Names}}" | grep -e mysql -e mariadb))
   cat << 'CONF' > /tmp/config.user.inc.php
 <?php
 $cfg['blowfish_secret']='multiServerDockerPhpmyadmin20171129';

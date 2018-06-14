@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOCKERNAME="mariadb"
+NAME="mariadb"
+STANDAR_PORT=3306
+PORT=$STANDAR_PORT
+VERSION="latest"
+
+function new_container {
+  IMAGE_EXTRA_OPTIONS="-e MYSQL_ALLOW_EMPTY_PASSWORD='yes' -v mariadb-data-$VERSION:/var/lib/mysql"
+  docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
+}
+
+source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
