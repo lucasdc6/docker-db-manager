@@ -1,4 +1,4 @@
-# Docker-wrapper-template
+# Docker-db-manager
 
 Template para generar wrappers que ejecuten fácilmente una imagen docker.
 La finalidad es proporcionar una capa de abstracción extra para solamente
