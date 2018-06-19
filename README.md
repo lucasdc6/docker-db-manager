@@ -25,8 +25,8 @@ $ git clone git@github.com:lucasdc6/Docker-wrapper-template.git ~/.docker-wrappe
 2. Agregar el directorio ~/.docker-wrappers/bin para contar con todos los ejecutables.
 Además agregar el directorio raíz donde se clonó el repositorio.
 ```bash
-$ echo 'export DOCKERWRAPPERS_ROOT=~/.docker-wrappers' >> ~/.bash_profile
-$ echo 'export PATH="$HOME/.docker-wrappers/bin:$PATH"' >> ~/.bash_profile
+$ echo 'export DOCKERDBMANAGERPATH=~/.docker-wrappers' >> ~/.bash_profile
+$ echo 'export PATH="$DOCKERDBMANAGERPATH/bin:$PATH"' >> ~/.bash_profile
 ```
 
 En ubuntu Ubuntu modificar ~/.bashrc
@@ -68,7 +68,7 @@ Los valores de cada variables se describen en la sección "Variables de ambiente
 Por ultimo es necesario realizar el llamado al template de la siguiente mantera:
 
 ```bash
-source $DOCKERWRAPPERS_ROOT/.docker_wrapper_template
+source $DOCKERDBMANAGERPATH/.docker_wrapper_template
 ```
 
 Es muy importante realizar el llamado al template **al final** del script para

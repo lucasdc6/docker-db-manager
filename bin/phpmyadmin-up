@@ -38,4 +38,4 @@ function new_container {
   echo "Config file at $FILE"
 }
 
-source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
+source $DOCKERDBMANAGERPATH/libexec/docker_wrapper_template

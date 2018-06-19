@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo -e "Availables databases:\n"
+for command in `ls $DOCKERDBMANAGERPATH/bin | grep "\-up"`; do
+  echo -e "\t* $command"
+done
+
+echo -e "\nFor more information, check https://github.com/lucasdc6/docker-db-managers"
+echo -e "\nWitten by Lucas Di Cunzolo (lucasdicunzolo@gmail.com)"

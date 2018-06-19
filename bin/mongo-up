@@ -11,4 +11,4 @@ function new_container {
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 
-source $DOCKERWRAPPERS_ROOT/libexec/docker_wrapper_template
+source $DOCKERDBMANAGERPATH/libexec/docker_wrapper_template
