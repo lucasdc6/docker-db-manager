@@ -33,6 +33,9 @@ Usage:
   Restart a running process
       $PROG --restart[=NAME] [ --version VERSION ]
 
+  Connect to database
+      $PROG --connect
+
 HELP
   # Define extra_option to add info extra for the options
   [ -n "$(type -t extra_option)" ] && ( extra_option )
@@ -53,6 +56,7 @@ HELP
   # Define extra_help to add info extra at the end of the basic help
   [ -n "$(type -t extra_help)" ] && ( extra_help )
 
+
   echo -e "\nVersion: `cat $DOCKERDBMANAGERPATH/VERSION`"
 }
 
@@ -63,7 +67,7 @@ fi
 
 set -e
 
-TEMP=`getopt -o n::s::r::l::v:p:c:h --long new::,status::,start::,stop::,restart::,remove::,list::,version:,port:,config:,help -n $PROG -- "$@"`
+TEMP=`getopt -o n::s::r::l::v:p:c:h --long new::,status::,start::,stop::,restart::,remove::,list::,version:,port:,config:,connect,help -n $PROG -- "$@"`
 eval set -- "$TEMP"
 
 function status_container {
@@ -98,7 +102,7 @@ function list_containers {
 
 function remove_container {
   echo -e "Removing $NAME-$VERSION"
-  docker rm $NAME-$VERSION > /dev/null
+  docker rm -f $NAME-$VERSION > /dev/null
 }
 
 while true ; do
@@ -135,6 +139,9 @@ while true ; do
         [ ! -r $2 -o ! -f $2 ] && ( echo "You must specify a FILE with READ permissions"; exit 1 )
         FILE=${2:-$FILE}
         shift 2 ;;
+    --connect)
+        OPTION="connect"
+        shift ;;
     -p|--port)
         [[ ! $2 =~ ^[0-9]+$ ]] && ( echo "You must specify a number"; exit 1)
         PORT=${2:-$PORT}
@@ -160,7 +167,10 @@ case $OPTION in
     RESTART_POLICY_DEFAULT="--restart=unless-stopped"
     DEFAULT_OPTIONS="--add-host local.docker:172.17.0.1 --name $NAME_DEFAULT -d $RESTART_POLICY_DEFAULT -p $PORTS_DEFAULT"
     echo $NAME-$VERSION in $PORT
-    new_container > /dev/null ;;
+    new_container;;
+  connect)
+    [ -z "$(type -t connect_container)" ] && ( echo "You need to define connect_container"; exit 1 )
+    connect_container $@;;
   status)
     status_container ;;
   start)
@@ -170,7 +180,6 @@ case $OPTION in
   restart)
     restart_container ;;
   remove)
-    stop_container
     remove_container ;;
   list)
     list_containers ;;
