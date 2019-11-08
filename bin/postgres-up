@@ -11,4 +11,14 @@ function new_container {
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 
+function connect_container {
+  if [ $# -eq 0 ]; then
+    USER=postgres
+  else
+    USER=$1
+  fi
+
+  docker exec -it "postgres-$VERSION" psql -U $USER
+}
+
 source $DOCKERDBMANAGERPATH/libexec/docker_wrapper_template

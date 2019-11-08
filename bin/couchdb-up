@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOCKERNAME="couchdb"
+NAME="couchdb"
+STANDAR_PORT=5984
+PORT=$STANDAR_PORT
+VERSION="latest"
+
+function new_container {
+  IMAGE_EXTRA_OPTIONS="-v couchdb-data-$VERSION:/data"
+  docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
+}
+
+source $DOCKERDBMANAGERPATH/libexec/docker_wrapper_template
