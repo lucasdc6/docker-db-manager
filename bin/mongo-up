@@ -5,9 +5,10 @@ NAME="mongo"
 STANDAR_PORT=27017
 PORT=$STANDAR_PORT
 VERSION="latest"
+DATA="/data/db"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v mongo-data-$VERSION:/data/db"
+  IMAGE_EXTRA_OPTIONS="-v mongo-data-$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

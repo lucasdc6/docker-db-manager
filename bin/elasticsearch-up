@@ -5,9 +5,10 @@ NAME="elasticsearch"
 STANDAR_PORT=9200
 PORT=$STANDAR_PORT
 VERSION=latest
+DATA="/usr/share/elasticsearch/data"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-e 'http.host=0.0.0.0' -e transport.host=127.0.0.1 -e 'xpack.security.enabled=false' -v /var/lib/elasticsearch/$VERSION:/usr/share/elasticsearch/data"
+  IMAGE_EXTRA_OPTIONS="-e 'http.host=0.0.0.0' -e transport.host=127.0.0.1 -e 'xpack.security.enabled=false' -v /var/lib/elasticsearch/$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

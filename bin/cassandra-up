@@ -1,14 +1,14 @@
 #!/bin/bash
 
-DOCKERNAME="redis"
-NAME="redis"
-STANDAR_PORT=6379
+DOCKERNAME="cassandra"
+NAME="cassandra"
+STANDAR_PORT=7000
 PORT=$STANDAR_PORT
 VERSION="latest"
-DATA="/data"
+DATA="/var/lib/cassandra"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v redis-data-$VERSION:$DATA"
+  IMAGE_EXTRA_OPTIONS="-v cassandra-data-$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

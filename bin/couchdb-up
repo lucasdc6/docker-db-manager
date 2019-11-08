@@ -5,9 +5,10 @@ NAME="couchdb"
 STANDAR_PORT=5984
 PORT=$STANDAR_PORT
 VERSION="latest"
+DATA="/opt/couchdb/data"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v couchdb-data-$VERSION:/data"
+  IMAGE_EXTRA_OPTIONS="-v couchdb-data-$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

@@ -5,9 +5,10 @@ NAME="postgres"
 STANDAR_PORT=5432
 PORT=$STANDAR_PORT
 VERSION="latest"
+DATA="/var/lib/postgresql/data"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v postgres-data-$VERSION:/var/lib/postgresql/data"
+  IMAGE_EXTRA_OPTIONS="-v postgres-data-$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 

@@ -5,9 +5,10 @@ NAME="influxdb"
 STANDAR_PORT=8086
 PORT=$STANDAR_PORT
 VERSION="latest"
+DATA="/var/lib/influxdb"
 
 function new_container {
-  IMAGE_EXTRA_OPTIONS="-v influx-data-$VERSION:/var/lib/mysql"
+  IMAGE_EXTRA_OPTIONS="-v influx-data-$VERSION:$DATA"
   docker run $DEFAULT_OPTIONS $IMAGE_EXTRA_OPTIONS $IMAGE_NAME
 }
 
